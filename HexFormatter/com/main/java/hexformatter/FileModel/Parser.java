@@ -2,7 +2,6 @@ package com.main.java.hexformatter.FileModel;
 
 import com.main.java.hexformatter.MathAPI.NumParser;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -11,54 +10,29 @@ import java.util.*;
 public class Parser {
     private ArrayList<String> lines = new ArrayList<String>();
 
-    private FileInputStream f_input;
-    private FileOutputStream f_output;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    public String getFormattedData(String text) {
+        parseData(text);
+        return formatData();
+    }
 
-    public Parser() {
-        try {
-            String path = "/Users/user/Java Education/HexFormatter/HexFormatter/com/main/resources";
-            f_input = new FileInputStream(path + "/input.txt");
+    private void parseData(String text) {
+        StringTokenizer tokenizer = new StringTokenizer(text);
+        while(tokenizer.hasMoreTokens()) {
+            lines.add(tokenizer.nextToken());
+        }
 
-            File file = new File(path + "/result.txt");
-            if(file.exists()) {
-                file.delete();
+        if(charactersExist()) {
+            for (int i = 0; i < lines.size(); i++) {
+                lines.set(i, NumParser.getNumbers(lines.get(i)));
             }
-
-            f_output = new FileOutputStream(path + "/result.txt");
-
-            reader = new BufferedReader(new InputStreamReader(f_input));
-            writer = new BufferedWriter(new OutputStreamWriter(f_output));
-
-            parseData();
-            pushChanges();
-        } catch(FileNotFoundException e) {
-            System.out.println("File not found.");
+        } else {
+            lines.clear();
+            lines.add("Unsupported character found!");
         }
     }
 
-    private void parseData() {
-        boolean status = false;
-        ArrayList<String> nums = new ArrayList<String>();
-
-        try {
-            do {
-                lines.add(reader.readLine());
-            } while(reader.ready());
-        } catch(IOException e) {
-            System.out.printf("Unsupported character(s) found, error: %s.\n", e);
-        } catch(IndexOutOfBoundsException e) {
-            System.out.printf("Index out of bound exception, error: %s.\n", e);
-        }
-
-        checkLines();
-        for(int i = 0; i < lines.size(); i++) {
-            lines.set(i, NumParser.getNumbers(lines.get(i)));
-        }
-    }
-
-    private void pushChanges() {
+    private String formatData() {
+        String result = "";
         try {
             for(int i = 0; i < lines.size(); i++) {
                 if((i + 1) >= lines.size()) {
@@ -71,22 +45,20 @@ public class Parser {
                     }
 
                 }
-                writer.write(lines.get(i) + "\n");
-            }
 
-            writer.close();
-            System.out.println("Process ended successfully!");
-        } catch(IOException e) {
-            System.out.printf("Unsupported character(s) found, error: %s.\n", e);
+                result += lines.get(i);
+            }
         } catch(IndexOutOfBoundsException e) {
             System.out.printf("Index out of bound exception, error: %s.\n", e);
+        } finally {
+            return result;
         }
     }
 
-    private void checkLines() {
+    private boolean charactersExist() {
         if(!lines.isEmpty() && lines != null) {
             String[] letters = {"A", "B", "C", "D", "E", "F"};
-            ArrayList<String> supported_letters = new ArrayList<String>();
+            ArrayList<String> supported_letters = new ArrayList<>();
 
             for(String element : letters) {
                 supported_letters.add(element);
@@ -96,12 +68,7 @@ public class Parser {
                 try {
                     for(int i = 0; i < element.length(); i++) {
                         if(!Character.isDigit(element.charAt(i)) && !supported_letters.contains(Character.toString(element.charAt(i)).toUpperCase()) && element.charAt(i) != ' ') {
-                            try {
-                                reader.close();
-                                writer.close();
-                            } catch(IOException e) {
-                                System.out.printf("Unsupported character(s) found, error: %s.\n", e);
-                            }
+                            return false;
                         }
                     }
                 } catch(NullPointerException e) {
@@ -109,5 +76,6 @@ public class Parser {
                 }
             }
         }
+        return true;
     }
 }

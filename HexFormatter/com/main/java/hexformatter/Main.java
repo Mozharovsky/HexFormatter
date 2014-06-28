@@ -1,6 +1,6 @@
 package com.main.java.hexformatter;
 
-import com.main.java.hexformatter.FileModel.Parser;
+import com.main.java.hexformatter.GUI.Formatter;
 
 /**
  * Created by E. Mozharovsky on 11.05.14.
@@ -8,6 +8,6 @@ import com.main.java.hexformatter.FileModel.Parser;
 public class Main {
     public static void main(String[] args) {
         // An anonymous object
-        new Parser();
+        new Formatter();
     }
 }

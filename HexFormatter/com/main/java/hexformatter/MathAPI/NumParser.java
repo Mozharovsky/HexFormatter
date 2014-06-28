@@ -8,11 +8,7 @@ import java.util.StringTokenizer;
 /**
  * Created by E. Mozharovsky on 11.05.14.
  */
-public class NumParser {
-    private NumParser() {
-        // A private constructor, so nobody can create instances of this class
-    }
-
+public abstract class NumParser {
     public static String getNumbers(@NotNull String line) {
         String result = "";
         ArrayList<String> nums = new ArrayList<String>();
