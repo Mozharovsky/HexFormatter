@@ -22,6 +22,7 @@ public class Formatter extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         init();
+        setTitle("HexFormatter");
 
         setSize(WIDTH, HEIGHT);
         setVisible(true);
@@ -107,13 +108,13 @@ public class Formatter extends JFrame {
         about.addActionListener(e -> JOptionPane.showMessageDialog(getContentPane(), "Copyright (c) 2014 E. Mozharovsky. All rights reserved. \nThe app is written in Java 8 (jdk_1.8.X).\n\nContact us: mozharovsky@live.com", "About me", JOptionPane.INFORMATION_MESSAGE));
 
         JMenuItem clear = new JMenuItem("Clear");
-        clear.addActionListener(e -> dispose());
-
-        JMenuItem close = new JMenuItem("Close");
-        close.addActionListener(e -> {
+        clear.addActionListener(e -> {
             input.setText("");
             output.setText("");
         });
+
+        JMenuItem close = new JMenuItem("Close");
+        close.addActionListener(e -> System.exit(0));
 
         file.add(about);
         file.add(clear);
